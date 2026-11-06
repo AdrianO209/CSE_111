@@ -1,11 +1,11 @@
-DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS portfolios;
-DROP TABLE IF EXISTS stocks;
+DROP TABLE IF EXISTS watchlist_items;
+DROP TABLE IF EXISTS holdings;
+DROP TABLE IF EXISTS transactions;
 DROP TABLE IF EXISTS orders;
 DROP TABLE IF EXISTS watchlists;
-DROP TABLE IF EXISTS transactions;
-DROP TABLE IF EXISTS holdings;
-DROP TABLE IF EXISTS watchlistItems;
+DROP TABLE IF EXISTS portfolios;
+DROP TABLE IF EXISTS stocks;
+DROP TABLE IF EXISTS users;
 
 -- Creating tables
 
@@ -14,7 +14,6 @@ CREATE TABLE users (
   name VARCHAR(100) NOT NULL,
   cash_balance DECIMAL(12,2) NOT NULL DEFAULT 0.0 CHECK (cash_balance >= 0.0)
 );
-
 
 CREATE TABLE portfolios (
   portfolio_id INTEGER PRIMARY KEY,
@@ -31,7 +30,7 @@ CREATE TABLE stocks (
 
 CREATE TABLE orders (
   order_id INTEGER PRIMARY KEY,
-  order_type VARCHAR(4) NOT NULL CHECK (order_type('BUY', 'SELL')),
+  order_type VARCHAR(4) NOT NULL CHECK (order_type IN ('BUY', 'SELL')),
   quantity INTEGER NOT NULL CHECK (quantity > 0),
   price DECIMAL(10, 2) NOT NULL CHECK (PRICE >= 0),
   status VARCHAR(20) NOT NULL DEFAULT 'PENDING',
@@ -57,7 +56,7 @@ CREATE TABLE transactions (
   cost_basis DECIMAL(12, 2) NOT NULL CHECK (cost_basis >= 0.0),
   order_id INTEGER NOT NULL,
   ticker VARCHAR(10) NOT NULL,
-  FOREIGN KEY(order_id) REFERENCES order(order_id) ON UPDATE CASCADE ON DELETE RESTRICT,
+  FOREIGN KEY(order_id) REFERENCES orders(order_id) ON UPDATE CASCADE ON DELETE RESTRICT,
   FOREIGN KEY (ticker) REFERENCES stocks(ticker) ON UPDATE CASCADE ON DELETE RESTRICT
 );
 
@@ -120,7 +119,7 @@ INSERT INTO watchlists (watchlist_id, list_name, user_id) VALUES
 (2, 'Dividend Picks', 2),
 (3, 'Growth Watch',   3);
 
-INSERT INTO watchlistItems (watchlist_id, ticker, date_added) VALUES
+INSERT INTO watchlist_items (watchlist_id, ticker, date_added) VALUES
 (1, 'AAPL', '2026-10-01'),
 (1, 'MSFT', '2026-10-05'),
 (1, 'NVDA', '2026-10-12'),
@@ -128,14 +127,6 @@ INSERT INTO watchlistItems (watchlist_id, ticker, date_added) VALUES
 (2, 'JNJ', '2026-10-08'),
 (3, 'TSLA', '2026-10-15'),
 (3, 'AMZN', '2026-10-20');
-
-INSERT INTO orders (order_id, order_type, quantity, price, status, created_at, user_id, ticker) VALUES
-(1, 'BUY',  10, 225.50, 'EXECUTED',  '2026-10-15 09:30:00', 1, 'AAPL'),
-(2, 'BUY',   5, 420.00, 'EXECUTED',  '2026-10-16 10:15:00', 1, 'MSFT'),
-(3, 'SELL',  3, 780.25, 'EXECUTED',  '2026-10-20 14:45:00', 2, 'GOOGL'),
-(4, 'BUY',   8, 195.75, 'PENDING',   '2026-10-28 11:00:00', 3, 'NVDA'),
-(5, 'BUY',  15,  85.40, 'EXECUTED',  '2026-10-18 13:20:00', 2, 'JPM'),
-(6, 'SELL',  4, 310.00, 'CANCELLED', '2026-10-25 16:00:00', 1, 'TSLA');
 
 INSERT INTO holdings (portfolio_id, ticker, shares_owned, average_purchase_price) VALUES
 (1, 'AAPL',  10.0000, 225.50),
@@ -149,3 +140,5 @@ INSERT INTO transactions (transaction_id, quantity, price, executed_at, cost_bas
 (2, 5, 420.00, '2026-10-16 10:16:00', 2100.00, 2, 'MSFT'),
 (3, 3, 780.25, '2026-10-20 14:46:00', 2340.75, 3, 'GOOGL'),
 (4, 15, 85.40, '2026-10-18 13:21:00', 1281.00, 5, 'JPM');
+
+-- SQL queries
