@@ -1,144 +1,125 @@
-DROP TABLE IF EXISTS watchlist_items;
-DROP TABLE IF EXISTS holdings;
-DROP TABLE IF EXISTS transactions;
-DROP TABLE IF EXISTS orders;
-DROP TABLE IF EXISTS watchlists;
-DROP TABLE IF EXISTS portfolios;
-DROP TABLE IF EXISTS stocks;
-DROP TABLE IF EXISTS users;
+-- ============================================================================
+-- CSE 111 Fall 2026: Project Checkpoint 2 Script
+-- Project Title: [Insert Project Title Here]
+-- Team Members: [Adrian Ortizj Jr], [Jon Taylor]
+-- File: Checkpoint2-script.sql
+-- ============================================================================
 
--- Creating tables
+-- ============================================================================
+-- SCHEMA MODIFICATIONS SINCE CHECKPOINT 1
+-- ============================================================================
+-- Explain any modifications to your relational schema made since Checkpoint 1.
+-- (e.g., added indexes, modified check constraints, renamed columns, or 
+--  clarified weak entity vs. junction relationships). If no changes were made, 
+--  explicitly state: "No modifications made to the Checkpoint 1 schema."
+--
+-- Modifications:
+-- 1. [Description of schema modification 1, or None]
+-- 2. [Description of schema modification 2]
+-- ============================================================================
 
-CREATE TABLE users (
-  user_id INTEGER PRIMARY KEY,
-  name VARCHAR(100) NOT NULL,
-  cash_balance DECIMAL(12,2) NOT NULL DEFAULT 0.0 CHECK (cash_balance >= 0.0)
-);
+-- ============================================================================
+-- MEMBER CONTRIBUTIONS SUMMARY (GROUPED AT THE TOP)
+-- ============================================================================
+-- Identify the member contributions to each query or modification statement
+-- below. Each statement must sum to 100% across the 2 team members.
+--
+-- SECTION 1: SIMPLE STATEMENTS
+-- Statement 01: [Member 1]: XX%, [Member 2]: XX%
+-- Statement 02: [Member 1]: XX%, [Member 2]: XX%
+-- Statement 03: [Member 1]: XX%, [Member 2]: XX%
+-- Statement 04: [Member 1]: XX%, [Member 2]: XX%
+-- Statement 05: [Member 1]: XX%, [Member 2]: XX%
+-- Statement 06: [Member 1]: XX%, [Member 2]: XX%
+-- Statement 07: [Member 1]: XX%, [Member 2]: XX%
+-- Statement 08: [Member 1]: XX%, [Member 2]: XX%
+-- Statement 09: [Member 1]: XX%, [Member 2]: XX%
+-- Statement 10: [Member 1]: XX%, [Member 2]: XX%
+--
+-- SECTION 2: INTERMEDIATE STATEMENTS
+-- Statement 11: [Member 1]: XX%, [Member 2]: XX%
+-- Statement 12: [Member 1]: XX%, [Member 2]: XX%
+-- Statement 13: [Member 1]: XX%, [Member 2]: XX%
+-- Statement 14: [Member 1]: XX%, [Member 2]: XX%
+-- Statement 15: [Member 1]: XX%, [Member 2]: XX%
+-- Statement 16: [Member 1]: XX%, [Member 2]: XX%
+-- Statement 17: [Member 1]: XX%, [Member 2]: XX%
+-- Statement 18: [Member 1]: XX%, [Member 2]: XX%
+-- Statement 19: [Member 1]: XX%, [Member 2]: XX%
+-- Statement 20: [Member 1]: XX%, [Member 2]: XX%
+-- Statement 21: [Member 1]: XX%, [Member 2]: XX%
+--
+-- SECTION 3: COMPLEX STATEMENTS
+-- Statement 22: [Member 1]: XX%, [Member 2]: XX%
+-- Statement 23: [Member 1]: XX%, [Member 2]: XX%
+-- Statement 24: [Member 1]: XX%, [Member 2]: XX%
+-- Statement 25: [Member 1]: XX%, [Member 2]: XX%
+-- Statement 26: [Member 1]: XX%, [Member 2]: XX%
+-- Statement 27: [Member 1]: XX%, [Member 2]: XX%
+-- Statement 28: [Member 1]: XX%, [Member 2]: XX%
+-- Statement 29: [Member 1]: XX%, [Member 2]: XX%
+-- Statement 30: [Member 1]: XX%, [Member 2]: XX%
+-- Statement 31: [Member 1]: XX%, [Member 2]: XX%
+-- Statement 32: [Member 1]: XX%, [Member 2]: XX%
+-- ============================================================================
 
-CREATE TABLE portfolios (
-  portfolio_id INTEGER PRIMARY KEY,
-  portfolio_name VARCHAR(100) NOT NULL,
-  user_id INTEGER NOT NULL,
-  FOREIGN KEY (user_id) REFERENCES Users(user_id) ON UPDATE CASCADE ON DELETE CASCADE
-);
+-- Ensure SQLite foreign key constraints are enforced
+PRAGMA foreign_keys = ON;
 
-CREATE TABLE stocks (
-  ticker VARCHAR(10) PRIMARY KEY,
-  company_name VARCHAR(150) NOT NULL,
-  sector VARCHAR(50)
-);
+-- Set output format for readability during evaluation
+.headers on
+.mode column
 
-CREATE TABLE orders (
-  order_id INTEGER PRIMARY KEY,
-  order_type VARCHAR(4) NOT NULL CHECK (order_type IN ('BUY', 'SELL')),
-  quantity INTEGER NOT NULL CHECK (quantity > 0),
-  price DECIMAL(10, 2) NOT NULL CHECK (PRICE >= 0),
-  status VARCHAR(20) NOT NULL DEFAULT 'PENDING',
-  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-  user_id INTEGER NOT NULL,
-  ticker VARCHAR(10) NOT NULL,
-  FOREIGN KEY (user_id) REFERENCES users(user_id) ON UPDATE CASCADE ON DELETE RESTRICT,
-  FOREIGN KEY (ticker) REFERENCES stocks(ticker) ON UPDATE CASCADE ON DELETE RESTRICT
-);
+-- ============================================================================
+-- SECTION 1: SIMPLE STATEMENTS (Roughly 10 Statements)
+-- Focus: Single-table projections/filters, simple inserts/updates/deletes, 
+--        basic sorting, simple aggregate functions, and pattern matching.
+-- ============================================================================
 
-CREATE TABLE watchlists(
-  watchlist_id INTEGER PRIMARY KEY,
-  list_name VARCHAR(100) NOT NULL,
-  user_id INTEGER NOT NULL,
-  FOREIGN KEY (user_id) REFERENCES user(user_id) ON UPDATE CASCADE ON DELETE CASCADE
-);
+-- ----------------------------------------------------------------------------
+-- Statement 01: [Brief Title]
+-- Explanation: [1 to 2 sentences explaining what data the query retrieves 
+--              or what state modification it performs].
+-- ----------------------------------------------------------------------------
+-- [Insert SQL Statement 01 Here];
 
-CREATE TABLE transactions (
-  transaction_id INTEGER PRIMARY KEY,
-  quantity INTEGER NOT NULL CHECK (quantity > 0),
-  price DECIMAL(10, 2) NOT NULL CHECK (price >= 0.0),
-  executed_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-  cost_basis DECIMAL(12, 2) NOT NULL CHECK (cost_basis >= 0.0),
-  order_id INTEGER NOT NULL,
-  ticker VARCHAR(10) NOT NULL,
-  FOREIGN KEY(order_id) REFERENCES orders(order_id) ON UPDATE CASCADE ON DELETE RESTRICT,
-  FOREIGN KEY (ticker) REFERENCES stocks(ticker) ON UPDATE CASCADE ON DELETE RESTRICT
-);
+-- ----------------------------------------------------------------------------
+-- Statement 02: [Brief Title]
+-- Explanation: [Explanation here].
+-- ----------------------------------------------------------------------------
+-- [Insert SQL Statement 02 Here];
 
-CREATE TABLE holdings(
-  portfolio_id INTEGER NOT NULL,
-  ticker VARCHAR(10) NOT NULL,
-  shares_owned DECIMAL(12, 4) NOT NULL DEFAULT 0 CHECK (shares_owned >= 0),
-  average_purchase_price DECIMAL(10, 2) NOT NULL CHECK (average_purchase_price >= 0.0),
-  PRIMARY KEY (portfolio_id, ticker),
-  FOREIGN KEY (portfolio_id) REFERENCES portfolios(portfolio_id) ON UPDATE CASCADE ON DELETE CASCADE,
-  FOREIGN KEY (ticker) REFERENCES stocks(ticker) ON UPDATE CASCADE ON DELETE RESTRICT
-);
+-- [Continue Statements 03 through 10...]
 
-CREATE TABLE watchlist_items(
-  watchlist_id INTEGER NOT NULL,
-  ticker VARCHAR(10) NOT NULL,
-  date_added DATE,
-  PRIMARY KEY (watchlist_id, ticker),
-  FOREIGN KEY (watchlist_id) REFERENCES watchlists(watchlist_id) ON UPDATE CASCADE ON DELETE CASCADE,
-  FOREIGN KEY (ticker) REFERENCES stocks(ticker) ON UPDATE CASCADE ON DELETE RESTRICT
-);
 
--- INSERT DATA
+-- ============================================================================
+-- SECTION 2: INTERMEDIATE STATEMENTS (Roughly 10 Statements)
+-- Focus: Multi-table inner joins, left outer joins, aggregation with GROUP BY 
+--        and HAVING, scalar subqueries, table aliasing, and conditional updates.
+-- ============================================================================
 
-INSERT INTO users (user_id, name, cash_balance) VALUES
-(1, 'Alice Johnson', 10000.00),
-(2, 'Bob Smith',       7500.50),
-(3, 'Carol White',    12500.00),
-(4, 'David Lee',       5000.00);
+-- ----------------------------------------------------------------------------
+-- Statement 11: [Brief Title]
+-- Explanation: [1 to 2 sentences explaining the join logic, filtering, 
+--              or conditional modification].
+-- ----------------------------------------------------------------------------
+-- [Insert SQL Statement 11 Here];
 
-INSERT INTO portfolios (portfolio_id, portfolio_name, user_id) VALUES
-(1, 'Alice Main Portfolio',      1),
-(2, 'Alice Tech Growth',         1),
-(3, 'Bob Retirement Fund',         2),
-(4, 'Carol Growth Portfolio',    3),
-(5, 'David Starter Portfolio',   4);
+-- [Continue Statements 12 through 21...]
 
-INSERT INTO stocks (ticker, company_name, sector) VALUES
-('AAPL', 'Apple Inc.', 'Technology'),
-('MSFT', 'Microsoft Corporation', 'Technology'),
-('GOOGL', 'Alphabet Inc.', 'Communication Services'),
-('AMZN', 'Amazon.com Inc.', 'Consumer Discretionary'),
-('TSLA', 'Tesla Inc.', 'Consumer Discretionary'),
-('JPM', 'JPMorgan Chase & Co.', 'Financials'),
-('NVDA', 'NVIDIA Corporation', 'Technology'),
-('JNJ', 'Johnson & Johnson', 'Healthcare'),
-('XOM', 'Exxon Mobil Corporation', 'Energy'),
-('WMT', 'Walmart Inc.', 'Consumer Staples');
 
-INSERT INTO orders (order_id, order_type, quantity, price, status, created_at, user_id, ticker) VALUES
-(1, 'BUY', 10, 225.50, 'EXECUTED', '2026-10-15 09:30:00', 1, 'AAPL'),
-(2, 'BUY', 5, 420.00, 'EXECUTED', '2026-10-16 10:15:00', 1, 'MSFT'),
-(3, 'SELL', 3, 780.25, 'EXECUTED', '2026-10-20 14:45:00', 2, 'GOOGL'),
-(4, 'BUY', 8, 195.75, 'PENDING',  '2026-10-28 11:00:00', 3, 'NVDA'),
-(5, 'BUY', 15, 85.40, 'EXECUTED', '2026-10-18 13:20:00', 2, 'JPM'),
-(6, 'SELL', 4, 310.00, 'CANCELLED','2026-10-25 16:00:00', 1, 'TSLA');
+-- ============================================================================
+-- SECTION 3: COMPLEX STATEMENTS (Roughly 10 Statements)
+-- Focus: Correlated subqueries (EXISTS/NOT EXISTS), set operations 
+--        (UNION, INTERSECT, EXCEPT), Common Table Expressions (WITH / CTEs), 
+--        window functions (ROW_NUMBER, DENSE_RANK), VIEW creation/querying, 
+--        multi-condition triggers, and complex analytics.
+-- ============================================================================
 
-INSERT INTO watchlists (watchlist_id, list_name, user_id) VALUES
-(1, 'Tech Favorites', 1),
-(2, 'Dividend Picks', 2),
-(3, 'Growth Watch',   3);
+-- ----------------------------------------------------------------------------
+-- Statement 22: [Brief Title]
+-- Explanation: [1 to 2 sentences explaining the complex query/trigger logic].
+-- ----------------------------------------------------------------------------
+-- [Insert SQL Statement 22 Here];
 
-INSERT INTO watchlist_items (watchlist_id, ticker, date_added) VALUES
-(1, 'AAPL', '2026-10-01'),
-(1, 'MSFT', '2026-10-05'),
-(1, 'NVDA', '2026-10-12'),
-(2, 'JPM', '2026-10-03'),
-(2, 'JNJ', '2026-10-08'),
-(3, 'TSLA', '2026-10-15'),
-(3, 'AMZN', '2026-10-20');
-
-INSERT INTO holdings (portfolio_id, ticker, shares_owned, average_purchase_price) VALUES
-(1, 'AAPL',  10.0000, 225.50),
-(1, 'MSFT',   5.0000, 420.00),
-(3, 'GOOGL',  7.0000, 775.00),
-(3, 'JPM',   15.0000,  85.40),
-(2, 'NVDA',   8.0000, 190.00);
-
-INSERT INTO transactions (transaction_id, quantity, price, executed_at, cost_basis, order_id, ticker) VALUES
-(1, 10, 225.50, '2026-10-15 09:31:00', 2255.00, 1, 'AAPL'),
-(2, 5, 420.00, '2026-10-16 10:16:00', 2100.00, 2, 'MSFT'),
-(3, 3, 780.25, '2026-10-20 14:46:00', 2340.75, 3, 'GOOGL'),
-(4, 15, 85.40, '2026-10-18 13:21:00', 1281.00, 5, 'JPM');
-
--- SQL queries
+-- [Continue Statements 23 through 32...]
