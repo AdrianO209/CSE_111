@@ -25,7 +25,7 @@
 -- below. Each statement must sum to 100% across the 2 team members.
 --
 -- SECTION 1: SIMPLE STATEMENTS
--- Statement 01: [Member 1]: XX%, [Member 2]: XX%
+-- Statement 01: [Adrian Ortiz Jr]: 100%, [Jon Taylor]: 0%
 -- Statement 02: [Member 1]: XX%, [Member 2]: XX%
 -- Statement 03: [Member 1]: XX%, [Member 2]: XX%
 -- Statement 04: [Member 1]: XX%, [Member 2]: XX%
@@ -77,11 +77,15 @@ PRAGMA foreign_keys = ON;
 -- ============================================================================
 
 -- ----------------------------------------------------------------------------
--- Statement 01: [Brief Title]
--- Explanation: [1 to 2 sentences explaining what data the query retrieves 
---              or what state modification it performs].
+-- Statement 01: List Users and Their portfolios
+-- Explanation: This query retrieves a list of all users alognside the names 
+-- of the investment portfolios they own. It does this by joinin the users 
+-- and portfolios tables using their shared user_id to link each person to 
+-- their specific accounts.
 -- ----------------------------------------------------------------------------
--- [Insert SQL Statement 01 Here];
+SELECT users.name, portfolios.portfolio_name
+FROM users
+JOIN portfolios ON users.user_id = portfolios.user_id
 
 -- ----------------------------------------------------------------------------
 -- Statement 02: [Brief Title]
