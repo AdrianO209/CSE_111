@@ -1,7 +1,7 @@
 -- ============================================================================
 -- CSE 111 Fall 2026: Project Checkpoint 2 Script
 -- Project Title: [Insert Project Title Here]
--- Team Members: [Adrian Ortizj Jr], [Jon Taylor]
+-- Team Members: [Adrian Ortiz Jr], [Jon Taylor]
 -- File: Checkpoint2-script.sql
 -- ============================================================================
 
@@ -201,7 +201,7 @@ JOIN portfolios ON users.user_id = portfolios.user_id;
 -- ----------------------------------------------------------------------------
 -- Statement 13: All Transactions Cost
 -- Explanation: This query retrieves all the transactions that happened and
---              attaches the name to who each transaction belongs too.
+--              attaches the name to who each transaction belongs to.
 -- ----------------------------------------------------------------------------
 SELECT users.name, 
   transactions.cost_basis AS cost_basis_inDollars, 
@@ -226,7 +226,7 @@ GROUP BY users.name;
 -- ----------------------------------------------------------------------------
 -- Statement 15: Who Has A Watchlist
 -- Explanation: This query retrieves all the watchlist name current created and
---              who does it belong too.
+--              who does it belong to.
 -- ----------------------------------------------------------------------------
 SELECT users.name,
   watchlists.list_name AS watchlist_name
@@ -238,7 +238,7 @@ ORDER BY users.name ASC;
 -- Statement 16: Watchlist Tickers
 -- Explanation: This query does the same thing as statement 15, but adds
 --              watchlist items. Last statement query matched all watchlist
---              name with there appropriate names of who they belong too.
+--              name with there appropriate names of who they belong to.
 --              This query goes further by printing out all the tickers, which
 --              is in a watchlist and prints the name of the user, the watchlist
 --              name, and the ticker that is in that watchlist.
@@ -256,7 +256,7 @@ ORDER BY users.name ASC;
 -- Explanation: This query uses the NOT IN statement to find all the users who 
 --              does not have any orders.
 -- ------------------------------------------------------------------------ ----
-SELECT users.name 
+SELECT users.name
 FROM users
 WHERE user_id NOT IN (
   SELECT user_id 
@@ -264,19 +264,41 @@ WHERE user_id NOT IN (
 );
 
 -- ----------------------------------------------------------------------------
--- Statement 18:
--- Explanation: 
+-- Statement 18: Cancelled Or Pending Orders
+-- Explanation: This query retrieves all the orders who have a PENDING or
+--              CANCELLED status, and returns the names who those orders
+--              belong to.
 -- ----------------------------------------------------------------------------
+SELECT users.name,
+  orders.status,
+  orders.ticker
+FROM orders
+JOIN users ON users.user_id = orders.user_id 
+WHERE orders.status = "PENDING" OR orders.status = "CANCELLED";
 
 -- ----------------------------------------------------------------------------
--- Statement 19:
--- Explanation: 
+-- Statement 19: All Executed Orders
+-- Explanation: This is similar to statement 18 but this query retrieves all 
+--              the orders, which have a status of EXECUTED and the name who
+--              those orders belong to.
 -- ----------------------------------------------------------------------------
+SELECT users.name, 
+  orders.status, 
+  orders.ticker
+FROM orders
+JOIN users ON users.user_id = orders.user_id
+WHERE orders.status = "EXECUTED";
 
 -- ----------------------------------------------------------------------------
--- Statement 20:
--- Explanation: 
+-- Statement 20: Finding All tickers of a Watchlist
+-- Explanation: This query prints out the watchlist name and all the tickers
+--              that the watchlist is looking at.
 -- ----------------------------------------------------------------------------
+SELECT watchlists.list_name,
+  watchlist_items.ticker
+FROM watchlists
+JOIN watchlist_items ON watchlist_items.watchlist_id = watchlists.watchlist_id
+WHERE watchlists.watchlist_id= 2;
 
 
 -- ============================================================================
