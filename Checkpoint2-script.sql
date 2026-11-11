@@ -97,14 +97,14 @@ WHERE transactions.cost_basis > 2000;
 
 -- ----------------------------------------------------------------------------
 -- Statement 03: Insert New Order
--- Explanation: Insert a new order in orders
+-- Explanation: Insert a new order in orders.
 -- ----------------------------------------------------------------------------
 INSERT INTO orders (order_id, order_type, quantity, price, status, user_id, ticker) 
 VALUES (7, 'BUY', 10, 750.00, 'EXECUTED', 1, 'GOOGL');
 
 -- ----------------------------------------------------------------------------
 -- Statement 04: Insert New Transaction
--- Explanation: Insert a new transaction record that was made 
+-- Explanation: Insert a new transaction record that was made.
 -- ----------------------------------------------------------------------------
 INSERT INTO transactions (transaction_id, quantity, price, cost_basis, order_id, ticker) 
 VALUES (5, 10, 750.00, 7500.00, 7, 'GOOGL');
@@ -114,7 +114,8 @@ VALUES (5, 10, 750.00, 7500.00, 7, 'GOOGL');
 -- Explanation: Insert a new holding in holdings requires an order and
 --              transaction to occure. Previous insert statements make
 --              this insert valid. We also specific which portfolio that
---              it belongs too.
+--              it belongs too. Also note that user 1 never had a GOOGL holding,
+--              therefore it did not had a previous average purchase price.
 -- ----------------------------------------------------------------------------
 INSERT INTO holdings (portfolio_id, ticker, shares_owned, average_purchase_price) 
 VALUES (1, 'GOOGL', 10.0000, 750.00);
@@ -153,7 +154,8 @@ VALUES (5, 'Jacob Davis', 11000);
 -- Statement 09: Current Watchlists
 -- Explanation: This prints out all the watchlists currently created.
 -- ----------------------------------------------------------------------------
-SELECT watchlists.watchlist_id, watchlists.list_name
+SELECT watchlists.watchlist_id,
+  watchlists.list_name
 FROM watchlists
 
 -- ----------------------------------------------------------------------------
@@ -177,7 +179,9 @@ ORDER BY watchlist_items.date_added DESC;
 -- Explanation: This query retries all the trading activity all users have done,
 --              which includes the order type and what ticker did they buy/sell.
 -- ----------------------------------------------------------------------------
-SELECT users.name, orders.order_type, orders.ticker
+SELECT users.name,
+  orders.order_type,
+  orders.ticker
 FROM users
 JOIN orders ON users.user_id = orders.user_id
 ORDER BY users.name;
@@ -189,9 +193,90 @@ ORDER BY users.name;
 --              using their shared user_id to link each person to their 
 --              specific accounts.
 -- ----------------------------------------------------------------------------
-SELECT users.name, portfolios.portfolio_name
+SELECT users.name, 
+  portfolios.portfolio_name
 FROM users
 JOIN portfolios ON users.user_id = portfolios.user_id;
+
+-- ----------------------------------------------------------------------------
+-- Statement 13: All Transactions Cost
+-- Explanation: This query retrieves all the transactions that happened and
+--              attaches the name to who each transaction belongs too.
+-- ----------------------------------------------------------------------------
+SELECT users.name, 
+  transactions.cost_basis AS cost_basis_inDollars, 
+  transactions.ticker
+FROM users 
+JOIN orders ON orders.user_id = users.user_id
+JOIN transactions ON transactions.order_id = orders.order_id;
+
+-- ----------------------------------------------------------------------------
+-- Statement 14: Total Amount of Transaction Cost
+-- Explanation: This query retrieves the total amount of money each user spend
+--              by summing up all the transaction cost basis for all the
+--              transactions that did.
+-- ----------------------------------------------------------------------------
+SELECT users.name,
+  SUM(transactions.cost_basis) AS total_transaction_cost
+FROM users
+JOIN orders ON orders.user_id = users.user_id
+JOIN transactions ON transactions.order_id = orders.order_id
+GROUP BY users.name;
+
+-- ----------------------------------------------------------------------------
+-- Statement 15: Who Has A Watchlist
+-- Explanation: This query retrieves all the watchlist name current created and
+--              who does it belong too.
+-- ----------------------------------------------------------------------------
+SELECT users.name,
+  watchlists.list_name AS watchlist_name
+FROM users
+JOIN watchlists ON watchlists.user_id = users.user_id
+ORDER BY users.name ASC;
+
+-- ----------------------------------------------------------------------------
+-- Statement 16: Watchlist Tickers
+-- Explanation: This query does the same thing as statement 15, but adds
+--              watchlist items. Last statement query matched all watchlist
+--              name with there appropriate names of who they belong too.
+--              This query goes further by printing out all the tickers, which
+--              is in a watchlist and prints the name of the user, the watchlist
+--              name, and the ticker that is in that watchlist.
+-- ----------------------------------------------------------------------------
+SELECT users.name,
+  watchlists.list_name AS watchlist_name,
+  watchlist_items.ticker
+FROM users
+JOIN watchlists ON watchlists.user_id = users.user_id
+JOIN watchlist_items ON watchlist_items.watchlist_id = watchlists.watchlist_id
+ORDER BY users.name ASC;
+
+-- ----------------------------------------------------------------------------
+-- Statement 17: Users Who Have Not Placed Any Orders
+-- Explanation: This query uses the NOT IN statement to find all the users who 
+--              does not have any orders.
+-- ------------------------------------------------------------------------ ----
+SELECT users.name 
+FROM users
+WHERE user_id NOT IN (
+  SELECT user_id 
+  FROM orders
+);
+
+-- ----------------------------------------------------------------------------
+-- Statement 18:
+-- Explanation: 
+-- ----------------------------------------------------------------------------
+
+-- ----------------------------------------------------------------------------
+-- Statement 19:
+-- Explanation: 
+-- ----------------------------------------------------------------------------
+
+-- ----------------------------------------------------------------------------
+-- Statement 20:
+-- Explanation: 
+-- ----------------------------------------------------------------------------
 
 
 -- ============================================================================
