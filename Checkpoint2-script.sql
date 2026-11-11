@@ -90,17 +90,80 @@ FROM users;
 -- Explanation: Retrives the ticker and with the transaction amount
 --              bigger than 2000.
 -- ----------------------------------------------------------------------------
-SELECT transactions.ticker AS ticker, transactions.cost_basis AS cost_basis
+SELECT transactions.ticker AS ticker,
+  transactions.cost_basis AS cost_basis
 FROM transactions
 WHERE transactions.cost_basis > 2000;
 
 -- ----------------------------------------------------------------------------
--- Statement 03: 
--- Explanation: 
+-- Statement 03: Insert New Order
+-- Explanation: Insert a new order in orders
 -- ----------------------------------------------------------------------------
+INSERT INTO orders (order_id, order_type, quantity, price, status, user_id, ticker) 
+VALUES (7, 'BUY', 10, 750.00, 'EXECUTED', 1, 'GOOGL');
 
+-- ----------------------------------------------------------------------------
+-- Statement 04: Insert New Transaction
+-- Explanation: Insert a new transaction record that was made 
+-- ----------------------------------------------------------------------------
+INSERT INTO transactions (transaction_id, quantity, price, cost_basis, order_id, ticker) 
+VALUES (5, 10, 750.00, 7500.00, 7, 'GOOGL');
 
--- [Continue Statements 03 through 10...]
+-- ----------------------------------------------------------------------------
+-- Statement 05: Insert New Holding
+-- Explanation: Insert a new holding in holdings requires an order and
+--              transaction to occure. Previous insert statements make
+--              this insert valid. We also specific which portfolio that
+--              it belongs too.
+-- ----------------------------------------------------------------------------
+INSERT INTO holdings (portfolio_id, ticker, shares_owned, average_purchase_price) 
+VALUES (1, 'GOOGL', 10.0000, 750.00);
+
+-- ----------------------------------------------------------------------------
+-- Statement 06: Total Shares Of Each Portfolio
+-- Explanation: Finds the total amount of shares each portfolio
+--               currently owns.
+-- ----------------------------------------------------------------------------
+SELECT holdings.portfolio_id,
+  SUM(holdings.shares_owned) AS shares_owned
+FROM holdings
+GROUP BY holdings.portfolio_id;
+
+-- ----------------------------------------------------------------------------
+-- Statement 07: Highest Transaction Cost
+-- Explanation: Finds the high cost-basis (the total amount of money spend 
+--              in dollars for that transaction)
+-- ----------------------------------------------------------------------------
+SELECT transactions.ticker,
+  transactions.executed_at,
+  transactions.cost_basis AS highest_transaction_cost
+FROM transactions
+ORDER BY cost_basis DESC
+LIMIT 1;
+
+-- ----------------------------------------------------------------------------
+-- Statement 08: Adding New User
+-- Explanation: Inserting a new user name Jacob Davis with a cash_balance of
+--              $11000.
+-- ----------------------------------------------------------------------------
+INSERT INTO users (user_id, name, cash_balance)
+VALUES (5, 'Jacob Davis', 11000);
+
+-- ----------------------------------------------------------------------------
+-- Statement 09: Current Watchlists
+-- Explanation: This prints out all the watchlists currently created.
+-- ----------------------------------------------------------------------------
+SELECT watchlists.watchlist_id, watchlists.list_name
+FROM watchlists
+
+-- ----------------------------------------------------------------------------
+-- Statement 10: Stocks That Are In A Watchlist
+-- Explanation: List all the stocks that are being watched by a watchlist 
+--              and is ordered by the data added from most recent to oldest.
+-- ----------------------------------------------------------------------------
+SELECT *
+FROM watchlist_items
+ORDER BY watchlist_items.date_added DESC;
 
 
 -- ============================================================================
