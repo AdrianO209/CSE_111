@@ -173,9 +173,9 @@ ORDER BY watchlist_items.date_added DESC;
 -- ============================================================================
 
 -- ----------------------------------------------------------------------------
--- Statement 11: [Brief Title]
--- Explanation: [1 to 2 sentences explaining the join logic, filtering, 
---              or conditional modification].
+-- Statement 11: Users Trading Activity
+-- Explanation: This query retries all the trading activity all users have done,
+--              which includes the order type and what ticker did they buy/sell.
 -- ----------------------------------------------------------------------------
 SELECT users.name, orders.order_type, orders.ticker
 FROM users
@@ -183,11 +183,11 @@ JOIN orders ON users.user_id = orders.user_id
 ORDER BY users.name;
 
 -- Statement 12: List Users and Their portfolios
---               Explanation: This query retrieves a list of all users 
---               alognside the names of the investment portfolios they own. 
---               It does this by joinin the users and portfolios tables 
---               using their shared user_id to link each person to their 
---               specific accounts.
+-- Explanation: This query retrieves a list of all users 
+--              alognside the names of the investment portfolios they own. 
+--              It does this by joinin the users and portfolios tables 
+--              using their shared user_id to link each person to their 
+--              specific accounts.
 -- ----------------------------------------------------------------------------
 SELECT users.name, portfolios.portfolio_name
 FROM users
