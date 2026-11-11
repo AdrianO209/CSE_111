@@ -77,21 +77,28 @@ PRAGMA foreign_keys = ON;
 -- ============================================================================
 
 -- ----------------------------------------------------------------------------
--- Statement 01: List Users and Their portfolios
--- Explanation: This query retrieves a list of all users alognside the names 
--- of the investment portfolios they own. It does this by joinin the users 
--- and portfolios tables using their shared user_id to link each person to 
--- their specific accounts.
+-- Statement 01: List All Users
+-- Explanation: This query projects a single column from the users table
+--              to list all register account names. We uses an alias of
+--              'Users' for cleaner output.
 -- ----------------------------------------------------------------------------
-SELECT users.name, portfolios.portfolio_name
-FROM users
-JOIN portfolios ON users.user_id = portfolios.user_id
+SELECT users.name AS Users
+FROM users;
 
 -- ----------------------------------------------------------------------------
--- Statement 02: [Brief Title]
--- Explanation: [Explanation here].
+-- Statement 02: All transactions with a cost basis bigger than $2,000
+-- Explanation: Retrives the ticker and with the transaction amount
+--              bigger than 2000.
 -- ----------------------------------------------------------------------------
--- [Insert SQL Statement 02 Here];
+SELECT transactions.ticker AS ticker, transactions.cost_basis AS cost_basis
+FROM transactions
+WHERE transactions.cost_basis > 2000;
+
+-- ----------------------------------------------------------------------------
+-- Statement 03: 
+-- Explanation: 
+-- ----------------------------------------------------------------------------
+
 
 -- [Continue Statements 03 through 10...]
 
@@ -107,9 +114,21 @@ JOIN portfolios ON users.user_id = portfolios.user_id
 -- Explanation: [1 to 2 sentences explaining the join logic, filtering, 
 --              or conditional modification].
 -- ----------------------------------------------------------------------------
--- [Insert SQL Statement 11 Here];
+SELECT users.name, orders.order_type, orders.ticker
+FROM users
+JOIN orders ON users.user_id = orders.user_id
+ORDER BY users.name;
 
--- [Continue Statements 12 through 21...]
+-- Statement 12: List Users and Their portfolios
+--               Explanation: This query retrieves a list of all users 
+--               alognside the names of the investment portfolios they own. 
+--               It does this by joinin the users and portfolios tables 
+--               using their shared user_id to link each person to their 
+--               specific accounts.
+-- ----------------------------------------------------------------------------
+SELECT users.name, portfolios.portfolio_name
+FROM users
+JOIN portfolios ON users.user_id = portfolios.user_id;
 
 
 -- ============================================================================
