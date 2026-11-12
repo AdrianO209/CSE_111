@@ -7,6 +7,9 @@ DROP TABLE IF EXISTS portfolios;
 DROP TABLE IF EXISTS stocks;
 DROP TABLE IF EXISTS users;
 
+DROP VIEW view_usersOrders;
+DROP VIEW view_user_holdings;
+
 CREATE TABLE users (
   user_id INTEGER PRIMARY KEY,
   name VARCHAR(100) NOT NULL,
@@ -43,7 +46,7 @@ CREATE TABLE watchlists(
   watchlist_id INTEGER PRIMARY KEY,
   list_name VARCHAR(100) NOT NULL,
   user_id INTEGER NOT NULL,
-  FOREIGN KEY (user_id) REFERENCES user(user_id) ON UPDATE CASCADE ON DELETE CASCADE
+  FOREIGN KEY (user_id) REFERENCES users(user_id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE transactions (

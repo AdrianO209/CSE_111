@@ -156,7 +156,7 @@ VALUES (5, 'Jacob Davis', 11000);
 -- ----------------------------------------------------------------------------
 SELECT watchlists.watchlist_id,
   watchlists.list_name
-FROM watchlists
+FROM watchlists;
 
 -- ----------------------------------------------------------------------------
 -- Statement 10: Stocks That Are In A Watchlist
@@ -313,7 +313,7 @@ WHERE watchlists.watchlist_id= 2;
 -- Statement 21: View Creation For Users Orders
 -- Explanation: Creates a view that connections each order to a user.
 -- ----------------------------------------------------------------------------
-CREATE VIEW view_usersOrders AS 
+CREATE VIEW view_usersOrders AS
 SELECT users.name,
   users.user_id,
   orders.order_type,
@@ -389,27 +389,90 @@ JOIN watchlists ON watchlist_items.watchlist_id = watchlists.watchlist_id
 WHERE watchlists.user_id = 1;
 
 -- ----------------------------------------------------------------------------
--- Statement 26: 
--- Explanation: 
+-- Statement 26: Bob Smith Shopping List
+-- Explanation: This query is the similar to query from statement 25, but rather than
+--              using union, we use EXCEPT to find stocks that Bob have on
+--              his watchlist but currently does not own. We also take the ticker
+--              from the watchlist first and then take the difference to Bob
+--              ticker holdings.
 -- ----------------------------------------------------------------------------
+SELECT watchlist_items.ticker
+FROM watchlist_items
+JOIN watchlists ON watchlist_items.watchlist_id = watchlists.watchlist_id
+WHERE watchlists.user_id = 2
+
+EXCEPT
+
+SELECT ticker
+FROM view_user_holdings
+WHERE user_id = 2;
+
+
 
 -- ----------------------------------------------------------------------------
--- Statement 27: 
--- Explanation: 
+-- Statement 27: Sectors Exposure 
+-- Explanation: This query retrieves the user name and the number of distinct
+--              sectors that there stocks are considered. This also indicates
+--              which users have an active portfolios.
 -- ----------------------------------------------------------------------------
+SELECT users.name,
+  COUNT(DISTINCT stocks.sector) AS distinct_sectors_owned
+FROM users
+JOIN portfolios ON portfolios.user_id = users.user_id
+JOIN holdings ON holdings.portfolio_id = portfolios.portfolio_id
+JOIN stocks ON stocks.ticker = holdings.ticker
+GROUP BY users.user_id, users.name;
 
 -- ----------------------------------------------------------------------------
--- Statement 28: 
--- Explanation: 
+-- Statement 28: Most Recent Orders
+-- Explanation: This query reterives the most recent orders for each user who
+--              had a order in the first place. It does this by combining the 
+--              users relation to orders relation by the user_id attribute.
+--              Then we only select the rows that are equal to the sub query
+--              result, which in this case would be the most recent orders.
 -- ----------------------------------------------------------------------------
+SELECT users.name,
+  orders.ticker,
+  orders.order_type,
+  orders.status,
+  orders.created_at
+FROM users
+JOIN orders ON orders.user_id = users.user_id
+WHERE orders.created_at = (
+  SELECT MAX(created_at)
+  FROM orders AS sub_orders
+  WHERE sub_orders.user_id = orders.user_id
+);
 
 -- ----------------------------------------------------------------------------
--- Statement 29: 
--- Explanation: 
+-- Statement 29: Total Investment Capital
+-- Explanation: This query takes the sum of user shares owned times average 
+--              purchase price to find the total amount invested in dollars.
+--              We order it by total investment captial for each user in
+--              descending order.
 -- ----------------------------------------------------------------------------
+SELECT users.name,
+  portfolios.portfolio_name,
+  SUM(holdings.shares_owned * holdings.average_purchase_price) AS total_investment_capital
+FROM users
+JOIN portfolios ON portfolios.user_id = users.user_id
+JOIN holdings ON holdings.portfolio_id = portfolios.portfolio_id
+GROUP BY users.name, portfolios.portfolio_name
+ORDER BY total_investment_capital DESC;
 
 -- ----------------------------------------------------------------------------
--- Statement 30: 
--- Explanation: 
+-- Statement 30: Unwanted Stocks
+-- Explanation: This query retrieves all the stocks which currently no users
+--              hold. In other words, it prints out the ticker, company name,
+--              and sectors of each stock which currently is not in any users 
+--              portfolios.
 -- ----------------------------------------------------------------------------
-
+SELECT ticker,
+  company_name,
+  sector
+FROM stocks
+WHERE NOT EXISTS (
+  SELECT 1
+  FROM holdings 
+  WHERE holdings.ticker = stocks.ticker
+);
