@@ -310,9 +310,106 @@ WHERE watchlists.watchlist_id= 2;
 -- ============================================================================
 
 -- ----------------------------------------------------------------------------
--- Statement 22: [Brief Title]
--- Explanation: [1 to 2 sentences explaining the complex query/trigger logic].
+-- Statement 21: View Creation For Users Orders
+-- Explanation: Creates a view that connections each order to a user.
 -- ----------------------------------------------------------------------------
--- [Insert SQL Statement 22 Here];
+CREATE VIEW view_usersOrders AS 
+SELECT users.name,
+  users.user_id,
+  orders.order_type,
+  orders.quantity,
+  orders.price,
+  orders.status,
+  orders.created_at,
+  orders.ticker
+FROM users
+JOIN orders ON orders.user_id = users.user_id;
 
--- [Continue Statements 23 through 32...]
+-- ----------------------------------------------------------------------------
+-- Statement 22: User Full Trading Activity
+-- Explanation: Statement 11 is similar but this query gets the user_id and
+--              prints out the order status and the usage of a view.
+-- ----------------------------------------------------------------------------
+SELECT name,
+  order_type, 
+  status,
+  ticker
+FROM view_usersOrders
+WHERE user_id = 1;
+
+-- ----------------------------------------------------------------------------
+-- Statement 23:  Users Who Have Bough & Sold
+-- Explanation: We find the user id and the user name who placed both buy and
+--              sell orders.
+-- ----------------------------------------------------------------------------
+SELECT user_id, name
+FROM view_usersOrders
+WHERE LOWER(order_type) = 'buy'
+
+INTERSECT
+
+SELECT user_id, name
+FROM view_usersOrders
+WHERE LOWER(order_type) = 'sell';
+
+-- ----------------------------------------------------------------------------
+-- Statement 24: User Holding View Creation
+-- Explanation: Creates a view that connects all the users to there holdings
+--              and portfolios.
+-- ----------------------------------------------------------------------------
+CREATE VIEW view_user_holdings AS
+SELECT 
+  users.user_id,
+  users.name AS user_name,
+  portfolios.portfolio_id,
+  portfolios.portfolio_name,
+  holdings.ticker,
+  stocks.company_name,
+  holdings.shares_owned,
+  holdings.average_purchase_price
+FROM users
+JOIN portfolios ON users.user_id = portfolios.user_id
+JOIN holdings ON portfolios.portfolio_id = holdings.portfolio_id
+JOIN stocks ON holdings.ticker = stocks.ticker;
+
+-- ----------------------------------------------------------------------------
+-- Statement 25: Alice (user_id = 1) Stocks and Watchlist Stocks
+-- Explanation: This query retrieves what stocks does Alice owns and which
+--              stocks that she has on any of her watchlist.
+-- ----------------------------------------------------------------------------
+SELECT ticker, 'Currently Owned' AS relationship
+FROM view_user_holdings
+WHERE user_id = 1
+
+UNION
+
+SELECT watchlist_items.ticker, 'On Watchlist' AS relationship
+FROM watchlist_items
+JOIN watchlists ON watchlist_items.watchlist_id = watchlists.watchlist_id
+WHERE watchlists.user_id = 1;
+
+-- ----------------------------------------------------------------------------
+-- Statement 26: 
+-- Explanation: 
+-- ----------------------------------------------------------------------------
+
+-- ----------------------------------------------------------------------------
+-- Statement 27: 
+-- Explanation: 
+-- ----------------------------------------------------------------------------
+
+-- ----------------------------------------------------------------------------
+-- Statement 28: 
+-- Explanation: 
+-- ----------------------------------------------------------------------------
+
+-- ----------------------------------------------------------------------------
+-- Statement 29: 
+-- Explanation: 
+-- ----------------------------------------------------------------------------
+
+-- ----------------------------------------------------------------------------
+-- Statement 30: 
+-- Explanation: 
+-- ----------------------------------------------------------------------------
+
