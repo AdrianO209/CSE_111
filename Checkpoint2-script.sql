@@ -8,14 +8,7 @@
 -- ============================================================================
 -- SCHEMA MODIFICATIONS SINCE CHECKPOINT 1
 -- ============================================================================
--- Explain any modifications to your relational schema made since Checkpoint 1.
--- (e.g., added indexes, modified check constraints, renamed columns, or 
---  clarified weak entity vs. junction relationships). If no changes were made, 
---  explicitly state: "No modifications made to the Checkpoint 1 schema."
---
--- Modifications:
--- 1. [Description of schema modification 1, or None]
--- 2. [Description of schema modification 2]
+-- 1. No modifications made to the Checkpoint 1 schema
 -- ============================================================================
 
 -- ============================================================================
