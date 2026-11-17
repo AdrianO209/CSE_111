@@ -52,8 +52,6 @@
 -- Statement 28: [Adrian Ortiz Jr]: 0%, [Jon Taylor]: 100%
 -- Statement 29: [Adrian Ortiz Jr]: 0%, [Jon Taylor]: 1000%
 -- Statement 30: [Adrian Ortiz Jr]: 0%, [Jon Taylor]: 100%
--- Statement 31: [Adrian Ortiz Jr]: 100%, [Jon Taylor]: 0%
--- Statement 32: [Adrian Ortiz Jr]: 75%, [Jon Taylor]: 25%
 -- ============================================================================
 
 -- Ensure SQLite foreign key constraints are enforced
