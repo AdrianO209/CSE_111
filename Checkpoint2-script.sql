@@ -1,6 +1,6 @@
 -- ============================================================================
 -- CSE 111 Fall 2026: Project Checkpoint 2 Script
--- Project Title: [Insert Project Title Here]
+-- Project Title: StoqX
 -- Team Members: [Adrian Ortiz Jr], [Jon Taylor]
 -- File: Checkpoint2-script.sql
 -- ============================================================================
@@ -19,41 +19,41 @@
 --
 -- SECTION 1: SIMPLE STATEMENTS
 -- Statement 01: [Adrian Ortiz Jr]: 100%, [Jon Taylor]: 0%
--- Statement 02: [Member 1]: XX%, [Member 2]: XX%
--- Statement 03: [Member 1]: XX%, [Member 2]: XX%
--- Statement 04: [Member 1]: XX%, [Member 2]: XX%
--- Statement 05: [Member 1]: XX%, [Member 2]: XX%
--- Statement 06: [Member 1]: XX%, [Member 2]: XX%
--- Statement 07: [Member 1]: XX%, [Member 2]: XX%
--- Statement 08: [Member 1]: XX%, [Member 2]: XX%
--- Statement 09: [Member 1]: XX%, [Member 2]: XX%
--- Statement 10: [Member 1]: XX%, [Member 2]: XX%
+-- Statement 02: [Adrian Ortiz Jr]: 100%, [Jon Taylor]: 0%
+-- Statement 03: [Adrian Ortiz Jr]: 100%, [Jon Taylor]: 0%
+-- Statement 04: [Adrian Ortiz Jr]: 100%, [Jon Taylor]: 0%
+-- Statement 05: [Adrian Ortiz Jr]: 0%, [Jon Taylor]: 100%
+-- Statement 06: [Adrian Ortiz Jr]: 0%, [Jon Taylor]: 100%
+-- Statement 07: [Adrian Ortiz Jr]: 0%, [Jon Taylor]: 100%
+-- Statement 08: [Adrian Ortiz Jr]: 0%, [Jon Taylor]: 100%
+-- Statement 09: [Adrian Ortiz Jr]: 100%, [Jon Taylor]: 0%
+-- Statement 10: [Adrian Ortiz Jr]: 100%, [Jon Taylor]: 0%
 --
 -- SECTION 2: INTERMEDIATE STATEMENTS
--- Statement 11: [Member 1]: XX%, [Member 2]: XX%
--- Statement 12: [Member 1]: XX%, [Member 2]: XX%
--- Statement 13: [Member 1]: XX%, [Member 2]: XX%
--- Statement 14: [Member 1]: XX%, [Member 2]: XX%
--- Statement 15: [Member 1]: XX%, [Member 2]: XX%
--- Statement 16: [Member 1]: XX%, [Member 2]: XX%
--- Statement 17: [Member 1]: XX%, [Member 2]: XX%
--- Statement 18: [Member 1]: XX%, [Member 2]: XX%
--- Statement 19: [Member 1]: XX%, [Member 2]: XX%
--- Statement 20: [Member 1]: XX%, [Member 2]: XX%
--- Statement 21: [Member 1]: XX%, [Member 2]: XX%
+-- Statement 11: [Adrian Ortiz Jr]: 0%, [Jon Taylor]: 100%
+-- Statement 12: [Adrian Ortiz Jr]: 0%, [Jon Taylor]: 100%
+-- Statement 13: [Adrian Ortiz Jr]: 0%, [Jon Taylor]: 100%
+-- Statement 14: [Adrian Ortiz Jr]: 0%, [Jon Taylor]: 100%
+-- Statement 15: [Adrian Ortiz Jr]: 0%, [Jon Taylor]: 100%
+-- Statement 16: [Adrian Ortiz Jr]: 0%, [Jon Taylor]: 100%
+-- Statement 17: [Adrian Ortiz Jr]: 0%, [Jon Taylor]: 100%
+-- Statement 18: [Adrian Ortiz Jr]: 100%, [Jon Taylor]: 0%
+-- Statement 19: [Adrian Ortiz Jr]: 100%, [Jon Taylor]: 0%
+-- Statement 20: [Adrian Ortiz Jr]: 100%, [Jon Taylor]: 0%
+-- Statement 21: [Adrian Ortiz Jr]: 100%, [Jon Taylor]: 0%
 --
 -- SECTION 3: COMPLEX STATEMENTS
--- Statement 22: [Member 1]: XX%, [Member 2]: XX%
--- Statement 23: [Member 1]: XX%, [Member 2]: XX%
--- Statement 24: [Member 1]: XX%, [Member 2]: XX%
--- Statement 25: [Member 1]: XX%, [Member 2]: XX%
--- Statement 26: [Member 1]: XX%, [Member 2]: XX%
--- Statement 27: [Member 1]: XX%, [Member 2]: XX%
--- Statement 28: [Member 1]: XX%, [Member 2]: XX%
--- Statement 29: [Member 1]: XX%, [Member 2]: XX%
--- Statement 30: [Member 1]: XX%, [Member 2]: XX%
--- Statement 31: [Member 1]: XX%, [Member 2]: XX%
--- Statement 32: [Member 1]: XX%, [Member 2]: XX%
+-- Statement 22: [Adrian Ortiz Jr]: 100%, [Jon Taylor]: 0%
+-- Statement 23: [Adrian Ortiz Jr]: 100%, [Jon Taylor]: 0%
+-- Statement 24: [Adrian Ortiz Jr]: 100%, [Jon Taylor ]: 0%
+-- Statement 25: [Adrian Ortiz Jr]: 100%, [Jon Taylor`]: 0%
+-- Statement 26: [Adrian Ortiz Jr]: 100%, [Jon Taylor]: 0%
+-- Statement 27: [Adrian Ortiz Jr]: 100%, [Jon Taylor]: 0%
+-- Statement 28: [Adrian Ortiz Jr]: 0%, [Jon Taylor]: 100%
+-- Statement 29: [Adrian Ortiz Jr]: 0%, [Jon Taylor]: 1000%
+-- Statement 30: [Adrian Ortiz Jr]: 0%, [Jon Taylor]: 100%
+-- Statement 31: [Adrian Ortiz Jr]: 100%, [Jon Taylor]: 0%
+-- Statement 32: [Adrian Ortiz Jr]: 75%, [Jon Taylor]: 25%
 -- ============================================================================
 
 -- Ensure SQLite foreign key constraints are enforced
@@ -267,7 +267,7 @@ SELECT users.name,
   orders.ticker
 FROM orders
 JOIN users ON users.user_id = orders.user_id 
-WHERE orders.status = "PENDING" OR orders.status = "CANCELLED";
+WHERE orders.status = 'PENDING' OR orders.status = 'CANCELLED';
 
 -- ----------------------------------------------------------------------------
 -- Statement 19: All Executed Orders
@@ -280,7 +280,7 @@ SELECT users.name,
   orders.ticker
 FROM orders
 JOIN users ON users.user_id = orders.user_id
-WHERE orders.status = "EXECUTED";
+WHERE orders.status = 'EXECUTED';
 
 -- ----------------------------------------------------------------------------
 -- Statement 20: Finding All tickers of a Watchlist
